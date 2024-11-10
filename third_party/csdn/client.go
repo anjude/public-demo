@@ -10,7 +10,8 @@ import (
 	"strings"
 )
 
-var defaultAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+// var defaultAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+var defaultAgent = "let_me_go"
 
 type Client struct {
 	httpClient *httputil.HTTPClient
@@ -37,7 +38,9 @@ func (c *Client) GetUserToken() string {
 func (c *Client) GetArticleList(param schema.GetHotListReq) (*schema.GetHotListResp, error) {
 	resp := &schema.GetHotListResp{}
 	err := c.httpClient.Request(http.MethodGet, fmt.Sprintf("/phoenix/web/blog/hot-rank?page=%d&pageSize=%d&type=%s",
-		param.Page, param.PageSize, param.Type), nil, nil, resp)
+		param.Page, param.PageSize, param.Type), map[string]string{
+		"accept-language": "zh-CN,zh;q=0.9,en;q=0.8",
+	}, nil, resp)
 	if err != nil {
 		return nil, err
 	}
